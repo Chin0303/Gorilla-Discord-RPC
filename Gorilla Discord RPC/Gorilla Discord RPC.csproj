@@ -377,8 +377,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviours\DiscordManager.cs" />
+    <Compile Include="Discord\ActivityManager.cs" />
+    <Compile Include="Discord\Constants.cs" />
+    <Compile Include="Discord\Core.cs" />
+    <Compile Include="Discord\ImageManager.cs" />
+    <Compile Include="Discord\LobbyManager.cs" />
+    <Compile Include="Discord\StorageManager.cs" />
+    <Compile Include="Discord\StoreManager.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
