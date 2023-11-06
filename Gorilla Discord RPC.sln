@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gorilla Discord RPC", "Gorilla Discord RPC\Gorilla Discord RPC.csproj", "{A2227257-9273-4F92-885B-583050126BAC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2227257-9273-4F92-885B-583050126BAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2227257-9273-4F92-885B-583050126BAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2227257-9273-4F92-885B-583050126BAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2227257-9273-4F92-885B-583050126BAC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {54DB7AC9-9BD3-4A6C-A73B-3308F8D36222}
+	EndGlobalSection
+EndGlobal
