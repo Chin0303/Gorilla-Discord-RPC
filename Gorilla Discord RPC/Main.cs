@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Gorilla_Discord_RPC
 {
     [BepInPlugin(GUID, NAME, VERSION)]
-    internal class Main 
+    internal class Main : BaseUnityPlugin
     {
         internal const string
             GUID = "chin.discordrpc",
@@ -22,6 +22,7 @@ namespace Gorilla_Discord_RPC
         public static void Init()
         {
             new GameObject("DRPC_Manager").AddComponent<DiscordManager>();
+            Debug.Log("Init Done - discord rpc ");
         }
     }
 
@@ -31,3 +32,4 @@ namespace Gorilla_Discord_RPC
         public static void Postfix() => Main.Init();
     }
 }
+
