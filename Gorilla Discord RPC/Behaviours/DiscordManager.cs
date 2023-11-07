@@ -26,6 +26,18 @@ namespace Gorilla_Discord_RPC.Behaviours
             return "Not in a room";
         }
 
+        private void Update()
+        {
+            try
+            {
+                discord.RunCallbacks();
+            }
+            catch
+            {
+                Destroy(gameObject);
+            }
+        }
+
         private void Start()
         {
             Thread.Sleep(5000);
