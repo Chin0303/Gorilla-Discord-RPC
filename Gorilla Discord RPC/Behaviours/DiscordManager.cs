@@ -2,6 +2,7 @@
 using System.Threading;
 using Discord;
 using GorillaNetworking;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Gorilla_Discord_RPC.Behaviours
@@ -14,16 +15,29 @@ namespace Gorilla_Discord_RPC.Behaviours
         internal string largeImage;
         internal long time;
         internal string map;
+        
 
         internal Discord.Discord discord;
 
+
+        public static int PlayerCount;
+
         private string GetCurrentMap()
         {
-            if (PhotonNetworkController.Instance != null && PhotonNetworkController.Instance.currentJoinTrigger != null)
+            if (PhotonNetwork.InRoom)
             {
                 return PhotonNetworkController.Instance.currentJoinTrigger.gameModeName;
             }
-            return "Not in a room";
+            return "noroom"; // sets the large image to gorilla if no room
+        }
+
+        public static int GetPlayerCount()
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                return PhotonNetwork.CurrentRoom.Players.Count;
+            }
+            return 0; // Return 0 if not in a room
         }
 
         private void Update()
@@ -46,7 +60,7 @@ namespace Gorilla_Discord_RPC.Behaviours
 
             time = System.DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-            InvokeRepeating("CheckMap", 0, 3);
+            InvokeRepeating("UpdateMap", 0, 3); // probabakly not needed but i dont wantr to check every frame bc may cause lag and theres no reason to check it every fucking frame
         }
 
         private void LateUpdate()
@@ -54,42 +68,21 @@ namespace Gorilla_Discord_RPC.Behaviours
             try
             {
                 var activityManager = discord.GetActivityManager();
-                var activity = new Discord.Activity
+                var activity = new Activity
                 {
                     Details = details,
                     State = state,
                     Assets = new ActivityAssets { LargeImage = largeImage },
                 };
 
+                var party = new ActivityParty
+                {
+                    Size = new PartySize { CurrentSize = PlayerCount, MaxSize = 10 }
+                };
+
                 activityManager.UpdateActivity(activity, (result) => { });
 
-                switch (map)
-                {
-                    case "forest":
-                        largeImage = "forest";
-                        break;
-                    case "cave":
-                        largeImage = "cave";
-                        break;
-                    case "canyon":
-                        largeImage = "canyon";
-                        break;
-                    case "city":
-                        largeImage = "city";
-                        break;
-                    case "mountain":
-                        largeImage = "mountain";
-                        break;
-                    case "clouds":
-                        largeImage = "clouds";
-                        break;
-                    case "basement":
-                        largeImage = "basement";
-                        break;
-                    case "beach":
-                        largeImage = "beach";
-                        break;
-                }
+                largeImage = map;
             }
             catch (Exception e)
             {
@@ -97,9 +90,14 @@ namespace Gorilla_Discord_RPC.Behaviours
             }
         }
 
-        private void CheckMap()
+
+
+        public void UpdateMap() => map = GetCurrentMap();
+        public static void UpdatePlayerCount() 
         {
-            map = GetCurrentMap();
+            PlayerCount = GetPlayerCount();
+            Debug.Log(PlayerCount);
         }
+
     }
 }

@@ -378,6 +378,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviours\DiscordManager.cs" />
+    <Compile Include="Behaviours\PlayercountManager.cs" />
     <Compile Include="Discord\ActivityManager.cs" />
     <Compile Include="Discord\Constants.cs" />
     <Compile Include="Discord\Core.cs" />

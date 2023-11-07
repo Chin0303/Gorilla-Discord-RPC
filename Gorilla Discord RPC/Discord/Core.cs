@@ -262,6 +262,11 @@ namespace Discord
         public Int64 Start;
 
         public Int64 End;
+
+        public static implicit operator ActivityTimestamps(long v)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
