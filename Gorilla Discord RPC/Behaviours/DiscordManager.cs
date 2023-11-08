@@ -31,15 +31,6 @@ namespace Gorilla_Discord_RPC.Behaviours
             return "noroom"; // sets the large image to gorilla if no room
         }
 
-        public static int GetPlayerCount()
-        {
-            if (PhotonNetwork.InRoom)
-            {
-                return PhotonNetwork.CurrentRoom.Players.Count;
-            }
-            return 0; // Return 0 if not in a room
-        }
-
         private void Update()
         {
             try
@@ -71,14 +62,22 @@ namespace Gorilla_Discord_RPC.Behaviours
                 var activity = new Activity
                 {
                     Details = details,
-                    State = state,
+                    State = "In Room: ",
                     Assets = new ActivityAssets { LargeImage = largeImage },
                 };
-
-                var party = new ActivityParty
+                if (PhotonNetwork.InRoom)
                 {
-                    Size = new PartySize { CurrentSize = PlayerCount, MaxSize = 10 }
-                };
+                    var party = new ActivityParty
+                    {
+                        Id = PhotonNetwork.CurrentRoom.Name,
+                        
+                        Size = new PartySize
+                        {
+                            CurrentSize = PhotonNetwork.CurrentRoom.Players.Count,
+                            MaxSize = 10
+                        }
+                    };
+                }
 
                 activityManager.UpdateActivity(activity, (result) => { });
 
@@ -90,14 +89,6 @@ namespace Gorilla_Discord_RPC.Behaviours
             }
         }
 
-
-
         public void UpdateMap() => map = GetCurrentMap();
-        public static void UpdatePlayerCount() 
-        {
-            PlayerCount = GetPlayerCount();
-            Debug.Log(PlayerCount);
-        }
-
     }
 }
