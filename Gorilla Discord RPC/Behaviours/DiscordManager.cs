@@ -4,8 +4,6 @@ using Discord;
 using GorillaNetworking;
 using Photon.Pun;
 using UnityEngine;
-using BepInEx.Configuration;
-using static UnityEngine.Random;
 
 namespace Gorilla_Discord_RPC.Behaviours
 {
