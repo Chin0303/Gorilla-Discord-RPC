@@ -11,14 +11,19 @@ namespace Gorilla_Discord_RPC.Behaviours
     {
         internal long applicationID = 1028260474904657940;
         internal string details;
-        internal string state;
+
         internal string largeImage;
+        internal string smallImage;
+
         internal long time;
-        internal string map;
-        
+
+        internal string gameMode;
+
+        internal string roomState;
 
         internal Discord.Discord discord;
 
+        internal Activity activity;
 
         public static int PlayerCount;
 
@@ -28,7 +33,34 @@ namespace Gorilla_Discord_RPC.Behaviours
             {
                 return PhotonNetworkController.Instance.currentJoinTrigger.gameModeName;
             }
-            return "noroom"; // sets the large image to gorilla if no room
+            return "stump"; // sets the smoll image to stump image if no room
+        }
+
+        private string GetGameMode()
+        {
+            switch (GorillaComputer.instance.currentGameMode)
+            {
+                case "CASUAL":
+                    return "Playing Casual";
+                case "INFECTION":
+                    return "Playing Infection";
+                case "HUNT":
+                    return "Playing Hunt";
+                case "BATTLE":
+                    return "Playing PaintBrawl";
+                default:
+                    return "In A Modded Lobby"; // too lazy to also write down the modded gamemode and it will take up alot of space on the activity
+            }
+        }
+
+        private string GetRoomState()
+        {
+            if(PhotonNetworkController.Instance.isPrivate)
+            {
+                return "In A Private Room: ";
+            }
+            else 
+                return "In A Public Room: ";
         }
 
         private void Update()
@@ -51,7 +83,10 @@ namespace Gorilla_Discord_RPC.Behaviours
 
             time = System.DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
+
             InvokeRepeating("UpdateMap", 0, 3); // probabakly not needed but i dont wantr to check every frame bc may cause lag and theres no reason to check it every fucking frame
+            InvokeRepeating("CheckRoomState", 0, 10);
+            InvokeRepeating("CheckGameMode", 0, 10);
         }
 
         private void LateUpdate()
@@ -59,12 +94,30 @@ namespace Gorilla_Discord_RPC.Behaviours
             try
             {
                 var activityManager = discord.GetActivityManager();
-                var activity = new Activity
+
+                if (PhotonNetwork.InRoom)
                 {
-                    Details = details,
-                    State = "In Room: ",
-                    Assets = new ActivityAssets { LargeImage = largeImage },
+                    activity = new Activity
+                    {
+                        Details = gameMode,
+                        State = roomState + PhotonNetwork.CurrentRoom.Name,
+                    };
+                }
+
+                activity.Assets = new ActivityAssets
+                {
+                    LargeImage = "default",
+                    LargeText = "Gorilla Tag",
+
+                    SmallImage = smallImage,
+                    SmallText = char.ToUpper(smallImage[0]) + smallImage.Substring(1), // to capitalize the first letter of the string so it looks better on the activity
                 };
+
+                activity.Timestamps = new ActivityTimestamps
+                {
+                    Start = time
+                };
+
                 if (PhotonNetwork.InRoom)
                 {
                     var party = new ActivityParty
@@ -81,7 +134,6 @@ namespace Gorilla_Discord_RPC.Behaviours
 
                 activityManager.UpdateActivity(activity, (result) => { });
 
-                largeImage = map;
             }
             catch (Exception e)
             {
@@ -89,6 +141,8 @@ namespace Gorilla_Discord_RPC.Behaviours
             }
         }
 
-        public void UpdateMap() => map = GetCurrentMap();
+        public void UpdateMap() => smallImage = GetCurrentMap();
+        public void CheckRoomState() => roomState = GetRoomState();
+        public void CheckGameMode() => gameMode = GetGameMode();
     }
 }
