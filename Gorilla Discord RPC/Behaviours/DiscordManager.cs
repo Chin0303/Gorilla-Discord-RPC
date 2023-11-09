@@ -156,3 +156,5 @@ namespace Gorilla_Discord_RPC.Behaviours
         public void CheckGameMode() => gameMode = GetGameMode();
     }
 }
+
+// cats are really cool
