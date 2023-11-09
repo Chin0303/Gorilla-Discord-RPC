@@ -4,6 +4,8 @@ using Discord;
 using GorillaNetworking;
 using Photon.Pun;
 using UnityEngine;
+using BepInEx.Configuration;
+using static UnityEngine.Random;
 
 namespace Gorilla_Discord_RPC.Behaviours
 {
@@ -14,6 +16,7 @@ namespace Gorilla_Discord_RPC.Behaviours
 
         internal string largeImage;
         internal string smallImage;
+
 
         internal long time;
 
@@ -35,6 +38,7 @@ namespace Gorilla_Discord_RPC.Behaviours
             }
             return "stump"; // sets the smoll image to stump image if no room
         }
+
 
         private string GetGameMode()
         {
@@ -84,6 +88,7 @@ namespace Gorilla_Discord_RPC.Behaviours
             time = System.DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
 
+
             InvokeRepeating("UpdateMap", 0, 3); // probabakly not needed but i dont wantr to check every frame bc may cause lag and theres no reason to check it every fucking frame
             InvokeRepeating("CheckRoomState", 0, 10);
             InvokeRepeating("CheckGameMode", 0, 10);
@@ -100,9 +105,16 @@ namespace Gorilla_Discord_RPC.Behaviours
                     activity = new Activity
                     {
                         Details = gameMode,
-                        State = roomState + PhotonNetwork.CurrentRoom.Name,
                     };
+                    if(Main.showRoomName.Value)
+                    {
+                        activity.State = roomState + PhotonNetwork.CurrentRoom.Name;
+                    }
+                    else
+                        activity.State = roomState + "****"; 
                 }
+                else
+                    activity = new Activity { State = "Idling In Gorilla Tag" };
 
                 activity.Assets = new ActivityAssets
                 {
