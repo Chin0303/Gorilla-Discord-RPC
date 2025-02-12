@@ -32,7 +32,7 @@ namespace Gorilla_Discord_RPC.Behaviours
         {
             if (PhotonNetwork.InRoom)
             {
-                return PhotonNetworkController.Instance.currentJoinTrigger.gameModeName;
+                return PhotonNetworkController.Instance.currentJoinTrigger.networkZone;
             }
             return "stump"; // sets the smoll image to stump image if no room
         }
@@ -40,16 +40,20 @@ namespace Gorilla_Discord_RPC.Behaviours
 
         private string GetGameMode()
         {
-            switch (GorillaComputer.instance.currentGameMode)
+            switch (GorillaComputer.instance.currentGameMode.Value.ToLower())
             {
-                case "CASUAL":
+                case "casual":
                     return "Playing Casual";
-                case "INFECTION":
+                case "infection":
                     return "Playing Infection";
-                case "HUNT":
-                    return "Playing Hunt";
-                case "BATTLE":
-                    return "Playing PaintBrawl";
+                case "hunt":
+                    return "Playing Hunt"; // theoretical because hunt isnt a thing right now
+                case "battle":
+                    return "Playing PaintBrawl"; // also not a thing right now
+                case "freezetag":
+                    return "Playing FreezeTag"; // it's just infection but more toxic, still good tho
+                case "guardian":
+                    return "Playing Guardian"; // who the fuck even plays this?
                 default:
                     return "In A Modded Lobby"; // too lazy to also write down the modded gamemode and it will take up alot of space on the activity
             }
