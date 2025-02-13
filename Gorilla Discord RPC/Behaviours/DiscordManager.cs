@@ -32,7 +32,7 @@ namespace Gorilla_Discord_RPC.Behaviours
         {
             if (PhotonNetwork.InRoom)
             {
-                return PhotonNetworkController.Instance.currentJoinTrigger.gameModeName;
+                return PhotonNetworkController.Instance.currentJoinTrigger.networkZone;
             }
             return "stump"; // sets the smoll image to stump image if no room
         }
@@ -40,19 +40,13 @@ namespace Gorilla_Discord_RPC.Behaviours
 
         private string GetGameMode()
         {
-            switch (GorillaComputer.instance.currentGameMode)
+            string gameModeRaw = GorillaComputer.instance.currentGameMode.Value;
+            if (gameModeRaw.ToLower().Contains("modded"))
             {
-                case "CASUAL":
-                    return "Playing Casual";
-                case "INFECTION":
-                    return "Playing Infection";
-                case "HUNT":
-                    return "Playing Hunt";
-                case "BATTLE":
-                    return "Playing PaintBrawl";
-                default:
-                    return "In A Modded Lobby"; // too lazy to also write down the modded gamemode and it will take up alot of space on the activity
+                return "In a Modded Lobby";
             }
+            string gameMode = char.ToUpper(gameModeRaw[0]) + gameModeRaw.ToLower().Substring(1);
+            return $"Playing {gameMode}";
         }
 
         private string GetRoomState()
